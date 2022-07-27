@@ -150,7 +150,7 @@ namespace ft
             return &(operator*());
         }
 
-        // ! Accesses the element located n positions
+        // Accesses the element located n positions
         template <class Iterator>
         typename reverse_iterator<Iterator>::reference reverse_iterator<Iterator>::operator[] (reverse_iterator<Iterator>::difference_type n) const {
             retunr (*this).base()[-n - 1];

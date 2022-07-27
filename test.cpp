@@ -1,21 +1,18 @@
 #include "containers/vector.hpp"
 #include <iostream>
+#include <iostream>
+
 int main ()
 {
-  // constructors used in the same order as described above:
-  ft::vector<int> first;                                // empty vector of ints
-  ft::vector<int> second (4,100);                       // four ints with value 100
-  ft::vector<int> third (second.end(),second.begin());  // iterating through second
-  ft::vector<int> fourth (third);                       // a copy of third
+  ft::vector<int> foo (3,100);   // three ints with a value of 100
+  ft::vector<int> bar (2,200);   // two ints with a value of 200
 
-  // the iterator constructor can also be used to construct from arrays:
-  int myints[] = {16,2,77,29};
-  ft::vector<int> fifth (myints, myints + sizeof(myints) / sizeof(int) );
-
-  std::cout << "The contents of fifth are:";
-  for (ft::vector<int>::iterator it = fourth.begin(); it != fourth.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+  if (foo==bar) std::cout << "foo and bar are equal\n";
+  if (foo!=bar) std::cout << "foo and bar are not equal\n";
+  if (foo< bar) std::cout << "foo is less than bar\n";
+  if (foo> bar) std::cout << "foo is greater than bar\n";
+  if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
+  if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
 
   return 0;
 }
