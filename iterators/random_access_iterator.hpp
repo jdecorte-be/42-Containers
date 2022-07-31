@@ -1,6 +1,6 @@
-#pragma once
+#ifndef RANDOM_ACCESS_ITERATOR_HPP
+#define RANDOM_ACCESS_ITERATOR_HPP
 
-#include <memory>
 #include <exception>
 #include <stdexcept>
 #include <string>
@@ -27,7 +27,7 @@ namespace ft
                 random_access_iterator() : ptr(nullptr) {}
                 random_access_iterator(pointer newptr) : ptr(newptr) {}
             
-                random_access_iterator(const random_access_iterator& src) : ptr(src.ptr) {}; // cpy
+                random_access_iterator(const random_access_iterator& src) : ptr(src.ptr) {};
 
                 random_access_iterator &operator=(const random_access_iterator& rhs) {
                     if(this == &rhs)
@@ -162,8 +162,15 @@ namespace ft
             return lhs.base() >= rhs.base();
         }
 
+        template <typename It>
+        typename random_access_iterator<It>::difference_type operator- (const random_access_iterator<It>& lhs, const random_access_iterator<It>& rhs) {
+            return lhs.base() - rhs.base();
+        }
+        // * For const Ite
         template <typename It1, typename It2>
-        typename random_access_iterator<It1>::difference_type operator- (It1 &first, It2 &last) {
-            return last.base() - first.base();
+        typename random_access_iterator<It1>::difference_type operator- (const random_access_iterator<It1>& lhs, const random_access_iterator<It2>& rhs) {
+            return lhs.base() - rhs.base();
         }
 }
+
+#endif // !1 RANDOM_ACCESS_ITERATOR_HPP
