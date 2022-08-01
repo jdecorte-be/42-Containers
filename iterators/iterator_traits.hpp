@@ -9,7 +9,7 @@
 
 namespace ft
 {
-    template <typename Iterator>
+    template <class Iterator>
         struct iterator_traits
         {
             typedef typename Iterator::difference_type difference_type;
@@ -18,7 +18,7 @@ namespace ft
             typedef typename Iterator::reference reference;
             typedef typename Iterator::iterator_category iterator_category;
         };
-    template <typename T>
+    template <class T>
         struct iterator_traits<T*>
         {
             typedef std::ptrdiff_t difference_type;
@@ -27,7 +27,7 @@ namespace ft
             typedef T& reference;
             typedef std::random_access_iterator_tag iterator_category;
         };
-    template <typename T>
+    template <class T>
         struct iterator_traits<const T*>
         {
             typedef std::ptrdiff_t difference_type;

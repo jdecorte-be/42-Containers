@@ -3,31 +3,41 @@
 #include <iostream>
 #include <vector>
 
+#include <iostream>
+
+#define TESTED_TYPE std::string
+
+void	checkErase(ft::vector<TESTED_TYPE> const &vct,ft::vector<TESTED_TYPE>::const_iterator const &it)
+{
+	static int i = 0;
+	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
+}
 
 int		main(void)
 {
-  ft::vector<int> myvector (3,100);
-  ft::vector<int>::iterator it;
+	ft::vector<TESTED_TYPE> vct(10);
 
-  it = myvector.begin();
-  it = myvector.insert ( it , 200 );
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = std::string((vct.size() - i), i + 65);
 
-  // myvector.insert (it,2,300);
+	checkErase(vct, vct.erase(vct.begin() + 2));
 
-  // // "it" no longer valid, get a new one:
-  // it = myvector.begin();
+	checkErase(vct, vct.erase(vct.begin()));
+	checkErase(vct, vct.erase(vct.end() - 1));
 
-  // ft::vector<int> anothervector (2,400);
-  // myvector.insert (it+2,anothervector.begin(),anothervector.end());
+	checkErase(vct, vct.erase(vct.begin(), vct.begin() + 3));
+	checkErase(vct, vct.erase(vct.end() - 3, vct.end() - 1));
 
-  // int myarray [] = { 501,502,503 };
-  // myvector.insert (myvector.begin(), myarray, myarray+3);
+	vct.push_back("Hello");
+	vct.push_back("Hi there");
+	checkErase(vct, vct.erase(vct.end() - 3, vct.end()));
 
-  // std::cout << "myvector contains:";
-  // for (it=myvector.begin(); it<myvector.end(); it++)
-  //   std::cout << ' ' << *it;
-  // std::cout << '\n';
+	vct.push_back("ONE");
+	vct.push_back("TWO");
+	vct.push_back("THREE");
+	vct.push_back("FOUR");
+	checkErase(vct, vct.erase(vct.begin(), vct.end()));
 
-  return 0;
+	return (0);
 }
 

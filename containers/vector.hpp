@@ -20,14 +20,15 @@ namespace ft
     {
         public :
             typedef Allocator allocator_type;
-            typedef std::size_t size_type;
+            typedef std::allocator_traits<allocator_type> alloc_traits; 
+            typedef typename alloc_traits::size_type size_type;
         protected :
             typedef T value_type;
             typedef value_type& reference;
             typedef const value_type& const_reference;
-            typedef typename allocator_type::difference_type difference_type;
-            typedef typename allocator_type::pointer pointer;
-            typedef typename allocator_type::const_pointer const_pointer;
+            typedef typename alloc_traits::difference_type difference_type;
+            typedef typename alloc_traits::pointer pointer;
+            typedef typename alloc_traits::const_pointer const_pointer;
             typedef pointer iterator;
             typedef const_pointer const_iterator;
     };
@@ -43,14 +44,17 @@ namespace ft
         public :
             typedef T value_type;
             typedef Allocator allocator_type;
-            typedef value_type& reference;
-            typedef const value_type& const_reference;
+            
+            typedef typename base::reference reference;
+            typedef typename base::const_reference const_reference;
             typedef typename base::size_type size_type;
             typedef typename base::difference_type difference_type;
             typedef typename base::pointer pointer;
             typedef typename base::const_pointer const_pointer;
+
             typedef random_access_iterator<pointer> iterator;
             typedef random_access_iterator<const_pointer> const_iterator;
+
             typedef ft::reverse_iterator<iterator> reverse_iterator;
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
         private:
@@ -58,7 +62,7 @@ namespace ft
             size_type _size;
             size_type _cap;
 
-            allocator_type alloc;
+            allocator_type _alloc;
         public :
             // Default
             explicit vector (const allocator_type& alloc = allocator_type());
@@ -124,28 +128,17 @@ namespace ft
 
             void swap(vector &x);
             void clear();
-
-
-            void moveElementsToTheRight(iterator pos, size_type lenMov)
-            {
-                // Starting from the end, until it meets pos iterator
-                for (iterator it(end() - 1, end()); it.second != pos; --it.first, --it.second)
-                {
-                    alloc.construct(&(*(it.first + lenMov)), *it.first);
-                    alloc.destroy(&(*it.first));
-                }
-            }
     };
 
     // * Default
     template <class T, class Alloc>
     vector<T, Alloc>::vector(const allocator_type& alloc)
-        : arr(NULL), _size(0), _cap(0), alloc(alloc) {};
+        : arr(NULL), _size(0), _cap(0), _alloc(alloc) {};
 
     // * fill
     template <class T, class Alloc> 
     vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator_type& alloc)
-        : arr(NULL), _size(0), _cap(0), alloc(alloc)
+        : arr(NULL), _size(0), _cap(0), _alloc(alloc)
     {
         resize(n, val);
     };
@@ -154,20 +147,20 @@ namespace ft
     template <class T, class Alloc> 
     template <class InputIterator>
     vector<T, Alloc>::vector(InputIterator first, InputIterator last, const allocator_type &alloc, typename std::enable_if<!std::is_integral<InputIterator>::value >::type*)
-        :  arr(NULL), _size(0), _cap(0), alloc(alloc)
+        :  arr(NULL), _size(0), _cap(0), _alloc(alloc)
     {
         assign(first, last);
     };
 
     template <class T, class Alloc> 
-    vector<T, Alloc>::vector (const vector& x) : arr(NULL) ,_size(0), _cap(0), alloc(allocator_type()) {
+    vector<T, Alloc>::vector (const vector& x) : arr(NULL) ,_size(0), _cap(0), _alloc(allocator_type()) {
         *this = x;
     };
     
     template <class T, class Alloc> 
     vector<T, Alloc>::~vector() {
         clear();
-        alloc.deallocate(arr, _cap);
+        _alloc.deallocate(arr, _cap);
     };
 
     template <class T, class Alloc> 
@@ -177,7 +170,7 @@ namespace ft
         clear();
         reserve(x._cap);
         for(size_type i = 0; i < x._size ; i++)
-            alloc.construct(&arr[i], x.arr[i]);
+            _alloc.construct(&arr[i], x.arr[i]);
         _size = x._size;
         return *this;
     };
@@ -242,7 +235,7 @@ namespace ft
     // *
     template <class T, class Alloc> 
     typename vector<T, Alloc>::size_type vector<T, Alloc>::max_size() const {
-        return alloc.max_size();
+        return _alloc.max_size();
     }
 
     // *
@@ -253,12 +246,12 @@ namespace ft
         if (n < size())
         {
             for (size_type i = n; i < _size ; i++)
-                alloc.destroy(&arr[i]);
+                _alloc.destroy(&arr[i]);
         }
         else
         { 
             for (size_type i = _size; i < n ; i++)
-                alloc.construct(&arr[i], val);
+                _alloc.construct(&arr[i], val);
         }
         _size = n;
     }
@@ -272,18 +265,18 @@ namespace ft
     // *
     template <class T, class Alloc>    
     void vector<T, Alloc>::reserve(size_type n) {
-        if (n > alloc.max_size())
+        if (n > _alloc.max_size())
             throw std::length_error("vector::reserve");
         if (n > _cap)
         {
-            value_type *tmp_arr = alloc.allocate(n);
+            value_type *tmp_arr = _alloc.allocate(n);
             if(arr != NULL)
             {
                 for(size_type i = 0; i < n; i++)
-                    alloc.construct(&tmp_arr[i], arr[i]);
+                    _alloc.construct(&tmp_arr[i], arr[i]);
                 for(size_type i = 0; i < n; i++)
-                    alloc.destroy(&arr[i]);
-                alloc.deallocate(arr, _cap); // ?
+                    _alloc.destroy(&arr[i]);
+                _alloc.deallocate(arr, _cap); // ?
             }
             arr = tmp_arr;
             _cap = n;
@@ -365,7 +358,7 @@ namespace ft
 
     template <class T, class Alloc> 
     void vector<T, Alloc>::pop_back() {
-        alloc.destroy(&arr[_size - 1]);
+        _alloc.destroy(&arr[_size - 1]);
         _size--;
     }
 
@@ -391,9 +384,9 @@ namespace ft
         else if (_size == 0)
             reserve(n);
         for(size_type i = _size - 1; i >= pos; i--)
-            alloc.construct(&arr[i + n], arr[i]);
+            _alloc.construct(&arr[i + n], arr[i]);
         for(size_type i = _size - 1; i < n; i++)
-            alloc.construct(&arr[pos++], val);
+            _alloc.construct(&arr[pos++], val);
         _size += n;
     }
 
@@ -408,12 +401,12 @@ namespace ft
 
         for(difference_type i = _size - 1; i >= pos; i--)
         {
-            alloc.construct(&arr[i + n], arr[i]);
-            alloc.destroy(&arr[i]);
+            _alloc.construct(&arr[i + n], arr[i]);
+            _alloc.destroy(&arr[i]);
         }
 
         for(InputIterator ite = first; ite != last; ++ite)
-            alloc.construct(&arr[pos++], *ite);
+            _alloc.construct(&arr[pos++], *ite);
         
         _size += n;
     }
@@ -424,11 +417,11 @@ namespace ft
         
         for(size_type i = pos; i < _size - 1; i++)
         {
-            alloc.construct(&arr[i], arr[i + 1]);
-            alloc.destroy(&arr[i + 1]);
+            _alloc.construct(&arr[i], arr[i + 1]);
+            _alloc.destroy(&arr[i + 1]);
         }
         _size--;
-        alloc.destroy(&arr[_size - 1]);
+        _alloc.destroy(&arr[_size - 1]);
         return position;
     }
 
@@ -466,7 +459,7 @@ namespace ft
         if(arr != NULL)
         {
             for(size_type i = 0; i < _size; i++)
-                alloc.destroy(&arr[i]);
+                _alloc.destroy(&arr[i]);
             _size = 0;
         }
     }
@@ -523,6 +516,7 @@ namespace ft
         return !(lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
     
+
 
 
 
