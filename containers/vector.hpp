@@ -146,10 +146,12 @@ namespace ft
     // *
     template <class T, class Alloc> 
     template <class InputIterator>
-    vector<T, Alloc>::vector(InputIterator first, InputIterator last, const allocator_type &alloc, typename std::enable_if<!std::is_integral<InputIterator>::value >::type*)
+    vector<T, Alloc>::vector(InputIterator first, InputIterator last, const allocator_type &alloc,
+            typename std::enable_if<!std::is_integral<InputIterator>::value >::type*)
         :  arr(NULL), _size(0), _cap(0), _alloc(alloc)
     {
-        assign(first, last);
+        int n = last - first;
+        resize(n, 0);
     };
 
     template <class T, class Alloc> 
@@ -200,12 +202,12 @@ namespace ft
 
     template <class T, class Alloc> 
     typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin() {
-        return reverse_iterator(end());
+        return reverse_iterator(end() - 1);
     }
 
     template <class T, class Alloc> 
     typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rbegin() const {
-        return const_reverse_iterator(end());
+        return const_reverse_iterator(end() - 1);
     }
 
     template <class T, class Alloc> 
@@ -428,6 +430,7 @@ namespace ft
     
     template <class T, class Alloc> 
     typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last) {
+
         while(first != last)
         {
             std::cout << "testt1 " << std::endl;
