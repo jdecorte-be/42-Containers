@@ -5,26 +5,47 @@
 
 #include <iostream>
 
+#include<iostream> 
+#include<vector> 
+#include <list>
 
+#define TESTED_NAMESPACE ft
+#define TESTED_TYPE int
 
-
-int main ()
+void printSize(TESTED_NAMESPACE::vector<TESTED_TYPE> test)
 {
-  ft::vector<int> myvector;
+  std::cout << "================================" << std::endl;
+  std::cout << "size: " <<  test.size() << std::endl;
+  for (int i = 0; i < test.size(); ++i)
+    std::cout << test[i] << " ";
+  std::cout << std::endl;
+}
 
-  // set some values (from 1 to 10)
-  for (int i=1; i<=10; i++) myvector.push_back(i);
+int		main(void)
+{
+	const int size = 5;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it = vct.rbegin();
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite = vct.rbegin();
 
-  // erase the 6th element
-  myvector.erase (myvector.begin()+5);
+	for (int i = 0; i < size; ++i)
+		it[i] = (size - i) * 5;
 
-  // erase the first 3 elements:
-  myvector.erase (myvector.begin(),myvector.begin()+3);
+	it = it + 5;
+	it = 1 + it;
+	it = it - 4;
+	std::cout << *(it += 2) << std::endl;
+	std::cout << *(it -= 1) << std::endl;
 
-  std::cout << "myvector contains:";
-  for (unsigned i=0; i<myvector.size(); ++i)
-    std::cout << ' ' << myvector[i];
-  std::cout << '\n';
+	*(it -= 2) = 42;
+	*(it += 2) = 21;
 
-  return 0;
+	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+
+	std::cout << "(it == const_it): " << (ite == it) << std::endl;
+	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
+	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+
+	printSize(vct);
+	return (0);
 }
