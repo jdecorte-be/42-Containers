@@ -12,6 +12,7 @@
 
 #include "../iterators/reverse_iterator.hpp"
 #include "../iterators/random_access_iterator.hpp"
+#include "../iterators/utils.hpp"
 
 namespace ft
 {
@@ -41,15 +42,16 @@ namespace ft
     {
         private :
             typedef vector_base<T, Allocator> base;
+
         public :
             typedef T value_type;
             typedef Allocator allocator_type;
             typedef typename base::reference reference;
             typedef typename base::const_reference const_reference;
+            typedef typename base::size_type size_type;
             typedef typename base::difference_type difference_type;
             typedef typename base::pointer pointer;
             typedef typename base::const_pointer const_pointer;
-            typedef typename base::size_type size_type;
             typedef ft::random_access_iterator<pointer> iterator;
             typedef ft::random_access_iterator<const_pointer> const_iterator;
             typedef ft::reverse_iterator<iterator> reverse_iterator;
@@ -181,39 +183,40 @@ namespace ft
         return *this;
     };
 
-    // Iterator
+    // * Begin =================================================================
     template <class T, class Alloc> 
     typename vector<T, Alloc>::iterator vector<T, Alloc>::begin() {
-        return iterator(arr);
+        return arr;
     }
 
     template <class T, class Alloc> 
     typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const {
-        return const_iterator(arr);
+        return arr;
     }
 
+    // * End ====================================================================
     template <class T, class Alloc> 
     typename vector<T, Alloc>::iterator vector<T, Alloc>::end() {
-        if(arr == NULL) return iterator(arr);
-        else return iterator(&arr[_size]);
+        return arr + _size;
     }
 
     template <class T, class Alloc> 
     typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end() const {
-        if(arr == NULL) return const_iterator(arr);
-        else return const_iterator(&arr[_size]);
+        return arr + _size;
     }
 
+    // * RBegin ====================================================================
     template <class T, class Alloc> 
     typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin() {
-        return reverse_iterator(end() - 1);
+        return reverse_iterator(end());
     }
 
     template <class T, class Alloc> 
     typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rbegin() const {
-        return const_reverse_iterator(end() - 1);
+        return const_reverse_iterator(end());
     }
 
+    // * RBegin ====================================================================
     template <class T, class Alloc> 
     typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rend() {
         return reverse_iterator(begin());
@@ -406,8 +409,7 @@ namespace ft
     void vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator last, 
             typename std::enable_if<!std::is_integral<InputIterator>::value >::type*) {
         difference_type pos = position - begin();
-        size_type n =  last - first;
-
+        difference_type n = std::distance(first, last);
         reserve(_size + n);
 
         for(difference_type i = _size - 1; i >= pos; i--)

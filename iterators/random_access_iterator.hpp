@@ -14,7 +14,7 @@ namespace ft
         class random_access_iterator
         {
             public :
-                typedef Iterator iterator_type;
+                typedef Iterator    iterator_type;
                 typedef typename ft::iterator_traits<iterator_type>::value_type value_type;
                 typedef typename ft::iterator_traits<iterator_type>::difference_type difference_type;
                 typedef typename ft::iterator_traits<iterator_type>::pointer pointer;
@@ -28,17 +28,20 @@ namespace ft
                 random_access_iterator() : ptr(nullptr) {}
                 random_access_iterator(iterator_type newptr) : ptr(newptr) {}
 
-                explicit random_access_iterator(const random_access_iterator& src) : ptr(src.base()) {};
+                random_access_iterator(const random_access_iterator& src) : ptr(src.base()) {};
+
                 template <class T>
                 random_access_iterator(const random_access_iterator<T>& src) : ptr(src.base()) {};
 
-                random_access_iterator operator=(const random_access_iterator& x) {
-                    ptr = x.base();
+                random_access_iterator &operator=(const random_access_iterator& x) {\
+                    if(this != &x) {
+                        ptr = x.base();
+                    }
                     return *this;
                 }
 
                 // * base (getter for ptr)
-                pointer const &base() const {
+                iterator_type base() const {
                     return ptr;
                 }
 
@@ -60,7 +63,7 @@ namespace ft
                     return *this;
                 }
                 random_access_iterator  operator++(int) {
-                    random_access_iterator tmp = *this;
+                    random_access_iterator tmp(*this);
                     ++(*this);
                     return tmp;
                 }
@@ -71,7 +74,7 @@ namespace ft
                     return *this;
                 }
                 random_access_iterator  operator--(int) {
-                    random_access_iterator tmp = *this;
+                    random_access_iterator tmp(*this);
                     --(*this);
                     return tmp;
                 }
@@ -84,9 +87,7 @@ namespace ft
                 }
                 // * applies the binary operator+ on the base iterator and returns a random iterator
                 random_access_iterator operator- (difference_type n) const {
-                    random_access_iterator iter(*this);
-                    iter -= n;
-                    return iter;
+                    return *this + (-n);
                 }
 
                 // * function decreases by n
@@ -96,7 +97,7 @@ namespace ft
                 }
                 // * increases by n the base iterator 
                 random_access_iterator& operator-= (const difference_type &n) {
-                    ptr -= n;
+                    *this += -n;
                     return *this;
                 }
 
@@ -108,7 +109,7 @@ namespace ft
 
 
         template <typename It>
-        random_access_iterator<It> operator+ ( typename random_access_iterator<It>::difference_type n, random_access_iterator<It>& src) {
+        random_access_iterator<It> operator+ ( typename random_access_iterator<It>::difference_type n, random_access_iterator<It> &src) {
             src += n;
             return src;
         }
@@ -144,8 +145,8 @@ namespace ft
             return lhs.base() >= rhs.base();
         }
 
-        template <typename It>
-        typename random_access_iterator<It>::difference_type operator- (const random_access_iterator<It>& lhs, const random_access_iterator<It>& rhs) {
+        template <typename It1, typename It2>
+        typename random_access_iterator<It1>::difference_type operator- (const random_access_iterator<It1>& lhs, const random_access_iterator<It2>& rhs) {
             return lhs.base() - rhs.base();
         }
 
