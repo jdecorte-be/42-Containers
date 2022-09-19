@@ -33,7 +33,7 @@ namespace ft
                 template <class T>
                 random_access_iterator(const random_access_iterator<T>& src) : ptr(src.base()) {};
 
-                random_access_iterator &operator=(const random_access_iterator& x) {\
+                random_access_iterator &operator=(const random_access_iterator& x) {
                     if(this != &x) {
                         ptr = x.base();
                     }

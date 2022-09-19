@@ -18,13 +18,14 @@
 #include <iostream>
 #include <iterator>
 #include <map>
+#include "containers/map.hpp"
 using namespace std;
   
 int main()
 {
   
     // empty map container
-    map<int, int> gquiz1;
+    ft::map<int, int> gquiz1;
   
     // insert elements in random order
     gquiz1.insert(pair<int, int>(1, 40));
@@ -34,7 +35,7 @@ int main()
     gquiz1.insert(pair<int, int>(5, 50));
     gquiz1.insert(pair<int, int>(6, 50));
       
-      gquiz1[7]=10;     // another way of inserting a value in a map
+     gquiz1[7]=10;     // another way of inserting a value in a map
      
   
     // printing map gquiz1
