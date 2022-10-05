@@ -1,101 +1,40 @@
-#include "containers/vector.hpp"
+// map::insert (C++98)
 #include <iostream>
-#include <iostream>
-#include <vector>
-
-#include <iostream>
-
-#include<iostream> 
-#include<vector> 
-#include <list>
-#include <map> 
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <iostream>
-#include <iterator>
-#include <map>
 #include "containers/map.hpp"
-using namespace std;
-  
-int main()
+#include <list>
+#include <map>
+
+#define TESTED_NAMESPACE ft
+
+
+#define T1 int
+#define T2 std::string
+typedef TESTED_NAMESPACE::map<T1, T2>::value_type T3;
+
+int		main(void)
 {
-  
-    // empty map container
-    ft::map<int, int> gquiz1;
-  
-    // insert elements in random order
-    gquiz1.insert(pair<int, int>(1, 40));
-    gquiz1.insert(pair<int, int>(2, 30));
-    gquiz1.insert(pair<int, int>(3, 60));
-    gquiz1.insert(pair<int, int>(4, 20));
-    gquiz1.insert(pair<int, int>(5, 50));
-    gquiz1.insert(pair<int, int>(6, 50));
-      
-     gquiz1[7]=10;     // another way of inserting a value in a map
-     
-  
-    // printing map gquiz1
-    map<int, int>::iterator itr;
-    cout << "\nThe map gquiz1 is : \n";
-    cout << "\tKEY\tELEMENT\n";
-    for (itr = gquiz1.begin(); itr != gquiz1.end(); ++itr) {
-        cout << '\t' << itr->first << '\t' << itr->second
-             << '\n';
-    }
-    cout << endl;
-  
-    // assigning the elements from gquiz1 to gquiz2
-    map<int, int> gquiz2(gquiz1.begin(), gquiz1.end());
-  
-    // print all elements of the map gquiz2
-    cout << "\nThe map gquiz2 after"
-         << " assign from gquiz1 is : \n";
-    cout << "\tKEY\tELEMENT\n";
-    for (itr = gquiz2.begin(); itr != gquiz2.end(); ++itr) {
-        cout << '\t' << itr->first << '\t' << itr->second
-             << '\n';
-    }
-    cout << endl;
-  
-    // remove all elements up to
-    // element with key=3 in gquiz2
-    cout << "\ngquiz2 after removal of"
-            " elements less than key=3 : \n";
-    cout << "\tKEY\tELEMENT\n";
-    gquiz2.erase(gquiz2.begin(), gquiz2.find(3));
-    for (itr = gquiz2.begin(); itr != gquiz2.end(); ++itr) {
-        cout << '\t' << itr->first << '\t' << itr->second
-             << '\n';
-    }
-  
-    // remove all elements with key = 4
-    int num;
-    num = gquiz2.erase(4);
-    cout << "\ngquiz2.erase(4) : ";
-    cout << num << " removed \n";
-    cout << "\tKEY\tELEMENT\n";
-    for (itr = gquiz2.begin(); itr != gquiz2.end(); ++itr) {
-        cout << '\t' << itr->first << '\t' << itr->second
-             << '\n';
-    }
-  
-    cout << endl;
-  
-    // lower bound and upper bound for map gquiz1 key = 5
-    cout << "gquiz1.lower_bound(5) : "
-         << "\tKEY = ";
-    cout << gquiz1.lower_bound(5)->first << '\t';
-    cout << "\tELEMENT = " << gquiz1.lower_bound(5)->second
-         << endl;
-    cout << "gquiz1.upper_bound(5) : "
-         << "\tKEY = ";
-    cout << gquiz1.upper_bound(5)->first << '\t';
-    cout << "\tELEMENT = " << gquiz1.upper_bound(5)->second
-         << endl;
-  
-    return 0;
+	std::list<T3> lst;
+	std::list<T3>::iterator itlst;
+
+	lst.push_back(T3(42, "lol"));
+	lst.push_back(T3(50, "mdr"));
+	lst.push_back(T3(35, "funny"));
+	lst.push_back(T3(45, "bunny"));
+	lst.push_back(T3(21, "fizz"));
+	lst.push_back(T3(35, "this key is already inside"));
+	lst.push_back(T3(55, "fuzzy"));
+	lst.push_back(T3(38, "buzz"));
+	lst.push_back(T3(55, "inside too"));
+
+	std::cout << "List contains: " << lst.size() << " elements." << std::endl;
+	// for (itlst = lst.begin(); itlst != lst.end(); ++itlst)
+	// 	printPair(itlst);
+	std::cout << "---------------------------------------------" << std::endl;
+
+	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+	lst.clear();
+
+	// printSize(mp);
+
+	return (0);
 }

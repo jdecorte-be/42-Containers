@@ -16,6 +16,7 @@ namespace ft
 		{
 			protected :
 				Iterator iter;
+
 			public :
 				typedef Iterator iterator_type;
 				typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
@@ -37,7 +38,7 @@ namespace ft
 				// return iterator
 				iterator_type base() const { return iter; }
 
-				operator reverse_iterator<const Iterator>() const { return this->current; }
+				operator reverse_iterator<const Iterator>() const { return iter; }
 
 				// reference to the element pointed
 				reference operator*() const { Iterator tmp = iter; return *--tmp; }
