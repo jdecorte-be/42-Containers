@@ -619,37 +619,23 @@ namespace ft
 			}
 
 			bt_node *find_node( const Key &key) const {
-				bt_node *r = root;
-				if(!r)
-					return NULL;
-				while(r)
-				{
-					if(_comp(r->getKey(), key) && r->right)
-						r = r->right;
-					else if (_comp(key, r->getKey()) && r->left)
-						r = r->left;
-					else if(!_comp(r->getKey(), key) && !_comp(key, r->getKey()))
-						break;
-					else
-						r = NULL;
-				}
-				return r;
+				return find_node(root, key);
 			}
+
+			bt_node *find_node(bt_node *r, const Key &key) const {
+				if(!r || r->getKey() == key) 
+					return r;
+				if(_comp(key, r->getKey()))
+					return find_node(r->left, key);
+				return find_node(r->right, key);
+			}
+
 
 			void delete_node(bt_node *ptr) {
 				bt_node *tmp = ptr;
 				bt_node *x = NULL;
 
-				if(!ptr->left && !ptr->right)
-				{
-					if(!ptr->parent)
-						root = NULL;
-					else if(ptr->parent->left == ptr)
-						ptr->parent->left = NULL;
-					else
-						ptr->parent->right = NULL;
-				}
-				else if(!ptr->left)
+				if(!ptr->left)
 				{
 					x = ptr->right;
 					transplant(ptr, ptr->right);
@@ -661,7 +647,7 @@ namespace ft
 				}
 				else if(ptr->right && ptr->left)
 				{
-					tmp = left_most(ptr->left);
+					tmp = left_most(ptr->right);
 					x = tmp->right;
 					if(tmp->parent == ptr && x)
 						x->parent = tmp;
