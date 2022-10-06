@@ -12,9 +12,10 @@ namespace ft
 	class map
 	{
 		public :
-			//
-			// Node
-			// 
+		
+		// 
+		// Node
+		// 
 			struct bt_node
 			{
 				bt_node *left;
@@ -33,9 +34,9 @@ namespace ft
 				T &getVal() { return data.second; }
 			};
 
-			//
-			// Map Iterator
-			// 
+		//
+		// Map Iterator
+		// 
 			template <bool is_const>
 			class map_iterator
 			{
@@ -43,24 +44,21 @@ namespace ft
 					typedef ft::pair<const Key, T> pair_type;
 					typedef typename std::conditional<is_const, const pair_type, pair_type>::type value_type;
 					typedef typename std::conditional<is_const, const bt_node, bt_node>::type node_type;
-
 					typedef std::bidirectional_iterator_tag iterator_category;
 					typedef std::ptrdiff_t difference_type;
 					typedef size_t size_type;
 					typedef value_type* pointer;
 					typedef value_type& reference;
 
-
-
 				public :
 					node_type *ptr;
 					node_type *_end;
 
 				public :
-					//
-					// Constructor
-					// 
 
+				//
+				// Constructor
+				// 
 					map_iterator() : ptr(NULL), _end(NULL) {}
 
 					map_iterator(node_type *ptr) : ptr(ptr), _end(NULL) {}
@@ -89,9 +87,9 @@ namespace ft
 					}
 
 					map_iterator &operator++() {
-						if (this->ptr == NULL)//iterator at end or empty 
+						if (this->ptr == NULL)
 							return *this;
-						else if (!this->ptr->parent && !this->ptr->right)//node == root && !right
+						else if (!this->ptr->parent && !this->ptr->right)
 						{
 							this->_end = this->ptr;
 							this->ptr = NULL;
@@ -110,12 +108,12 @@ namespace ft
 					}
 
 					map_iterator &operator--() {
-						if (this->ptr == NULL)//iterator at end or empty 
+						if (this->ptr == NULL)
 						{
 							if(_end)
 								ptr = _end;
 						}
-						else if (!ptr->parent && !ptr->left)//node == root && !right
+						else if (!ptr->parent && !ptr->left)
 							ptr = NULL;
 						else if (ptr->left)
 							ptr = down_smallest_node();
@@ -138,8 +136,6 @@ namespace ft
 						return &ptr->data;
 					}
 
-			
-
 					template <bool B>
 					bool operator==(const map_iterator<B> tocomp) const {
 						return ptr == tocomp.base();
@@ -151,8 +147,6 @@ namespace ft
 					}
 
 				private : // Private function like Next and Prev Node // Post order (root is end)
-
-
 					node_type *up_bigger_node(node_type *node)
 					{
 						node_type *next;
@@ -241,21 +235,16 @@ namespace ft
 			};
 
 			typedef typename Alloc::template rebind<bt_node>::other		allocator_type;
-
 			typedef typename allocator_type::reference reference;
 			typedef typename allocator_type::const_reference const_reference;
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
-
 			typedef map_iterator<false>		iterator;
 			typedef map_iterator<true>		const_iterator;
-
 			typedef ft::reverse_iterator<iterator>		reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
-
 			typedef typename map_iterator<false>::difference_type		difference_type;
 			typedef typename map_iterator<false>::size_type		size_type;
-
 
 		private :
 			bt_node *root;
@@ -293,7 +282,6 @@ namespace ft
 				_alloc = other._alloc;
 				return *this;
 			}
-
 
 		// 
 		// Iterators
@@ -460,7 +448,6 @@ namespace ft
 					erase((first++).base());
 			}
 
-
 		//
 		// Lookup
 		// 
@@ -551,30 +538,12 @@ namespace ft
 			}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			void test() {
-				print2D(root);
-				std::cout << "\n";
-				std::cout << "\n";
-
-			}
+			// ! For test
+			// void test() {
+			// 	print2D(root);
+			// 	std::cout << "\n";
+			// 	std::cout << "\n";
+			// }
 
 		private :
 
@@ -704,37 +673,26 @@ namespace ft
 				ptr = NULL;
 			}
 
-			#define COUNT 10
+			// ! for test ==========
+			// #define COUNT 10
 
-			void print2DUtil(bt_node *root, int space)
-			{
-				// Base case
-				if (root == NULL)
-					return;
-			
-				// Increase distance between levels
-				space += COUNT;
-			
-				// Process right child first
-				print2DUtil(root->right, space);
-			
-				// Print current node after space
-				// count
-				std::cout << std::endl;
-				for (int i = COUNT; i < space; i++)
-					std::cout<<" ";
-				std::cout << root->getKey();
-			
-				// Process left child
-				print2DUtil(root->left, space);
-			}
-			
-			// Wrapper over print2DUtil()
-			void print2D(bt_node *root)
-			{
-				// Pass initial space count as 0
-				print2DUtil(root, 0);
-			}
+			// void print2DUtil(bt_node *root, int space)
+			// {
+			// 	if (root == NULL)
+			// 		return;
+			// 	space += COUNT;
+			// 	print2DUtil(root->right, space);
+			// 	std::cout << std::endl;
+			// 	for (int i = COUNT; i < space; i++)
+			// 		std::cout<<" ";
+			// 	std::cout << root->getKey();
+			// 	print2DUtil(root->left, space);
+			// }
+
+			// void print2D(bt_node *root)
+			// {
+			// 	print2DUtil(root, 0);
+			// }
 
 	};
 
@@ -748,7 +706,6 @@ namespace ft
 			if (*first2 < *first1)
 				return false;
 		}
-	
 		return (first1 == last1) && (first2 != last2);
 	}
 
