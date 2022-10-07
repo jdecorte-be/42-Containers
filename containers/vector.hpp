@@ -12,7 +12,6 @@
 
 #include "../iterators/reverse_iterator.hpp"
 #include "../iterators/random_access_iterator.hpp"
-#include "../iterators/utils.hpp"
 #include "../utils/is_integral.hpp"
 
 
@@ -66,18 +65,23 @@ namespace ft
 
             allocator_type _alloc;
         public :
-            // Default
+            // 
+            // Constructor
+            // 
             explicit vector (const allocator_type& alloc = allocator_type());
             explicit vector (size_type n, const value_type& val = value_type(),  const allocator_type& alloc = allocator_type());
+
             template <typename InputIterator>
-            vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename std::enable_if<!std::is_integral<InputIterator>::value >::type* = 0);
+            vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = 0);
             vector (const vector& x);
 
             ~vector();
 
             vector& operator= (const vector& x);
 
+            //
             // Iterator
+            // 
             iterator begin();
             const_iterator begin() const;
 
@@ -90,7 +94,9 @@ namespace ft
             reverse_iterator rend();
             const_reverse_iterator rend() const;
 
+            // 
             // Capacity
+            // 
             bool empty() const;
             size_type size() const;
             size_type max_size() const;
@@ -98,7 +104,9 @@ namespace ft
             size_type capacity() const;
             void reserve(size_type n);
 
+            // 
             // Element access
+            // 
             reference operator[](size_type n);
             const_reference operator[](size_type n) const;
 
@@ -111,9 +119,11 @@ namespace ft
             reference back();
             const_reference back() const;
 
+            // 
             // Modifiers
+            // 
             template <class InputIterator>
-            void assign(InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value >::type* = 0);
+            void assign(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = 0);
             void assign(size_type n, const value_type &val);
 
             void push_back(const value_type &val);
@@ -123,7 +133,7 @@ namespace ft
             void insert(iterator position, size_type n, const value_type &val);
 
             template <class InputIterator>
-            void insert(iterator position, InputIterator first, InputIterator last, typename std::enable_if<!std::is_integral<InputIterator>::value >::type* = 0);
+            void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = 0);
 
             iterator erase(iterator position);
             iterator erase(iterator first, iterator last);
@@ -132,12 +142,10 @@ namespace ft
             void clear();
     };
 
-    // * Default
     template <class T, class Alloc>
     vector<T, Alloc>::vector(const allocator_type& alloc)
         : arr(NULL), _size(0), _cap(0), _alloc(alloc) {};
 
-    // * fill
     template <class T, class Alloc> 
     vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator_type& alloc)
         : arr(NULL), _size(0), _cap(0), _alloc(alloc)
@@ -145,11 +153,10 @@ namespace ft
         resize(n, val);
     };
 
-    // *
     template <class T, class Alloc> 
     template <class InputIterator>
     vector<T, Alloc>::vector(InputIterator first, InputIterator last, const allocator_type &alloc,
-            typename std::enable_if<!std::is_integral<InputIterator>::value >::type*)
+            typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type*)
         :  arr(NULL), _size(0), _cap(0), _alloc(alloc)
     {
         assign(first, last);
@@ -185,6 +192,8 @@ namespace ft
         return *this;
     };
 
+    // 
+    // 
     // * Begin =================================================================
     template <class T, class Alloc> 
     typename vector<T, Alloc>::iterator vector<T, Alloc>::begin() {
@@ -196,6 +205,8 @@ namespace ft
         return arr;
     }
 
+    // 
+    // 
     // * End ====================================================================
     template <class T, class Alloc> 
     typename vector<T, Alloc>::iterator vector<T, Alloc>::end() {
@@ -207,6 +218,8 @@ namespace ft
         return arr + _size;
     }
 
+    // 
+    // 
     // * RBegin ====================================================================
     template <class T, class Alloc> 
     typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin() {
@@ -218,6 +231,8 @@ namespace ft
         return const_reverse_iterator(end());
     }
 
+    // 
+    // 
     // * RBegin ====================================================================
     template <class T, class Alloc> 
     typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rend() {
@@ -230,26 +245,24 @@ namespace ft
     }
 
 
+    // 
     // Capacity
-    // *
+    // 
     template <class T, class Alloc> 
     bool vector<T, Alloc>::empty() const {
         return _size == 0;
     }
 
-    // *
     template <class T, class Alloc> 
     typename vector<T, Alloc>::size_type vector<T, Alloc>::size() const {
         return _size;
     }
 
-    // *
     template <class T, class Alloc> 
     typename vector<T, Alloc>::size_type vector<T, Alloc>::max_size() const {
         return _alloc.max_size();
     }
 
-    // *
     template <class T, class Alloc>
     void vector<T, Alloc>::resize(size_type n, value_type val) {
         if(n > _cap)
@@ -267,13 +280,11 @@ namespace ft
         _size = n;
     }
 
-    // *
     template <class T, class Alloc> 
     typename vector<T, Alloc>::size_type vector<T, Alloc>::capacity() const {
         return _cap;
     }
 
-    // *
     template <class T, class Alloc>    
     void vector<T, Alloc>::reserve(size_type n) {
         if (n > _alloc.max_size())
@@ -295,7 +306,9 @@ namespace ft
     }
 
 
+    // 
     // Element access
+    // 
     template <class T, class Alloc> 
     typename vector<T, Alloc>::reference vector<T, Alloc>::operator[](size_type n) {
         return arr[n];
@@ -341,20 +354,18 @@ namespace ft
     }
 
 
+    // 
     // Modifiers
-    // *
+    // 
     template <class T, class Alloc> 
     template <class InputIterator>
     void vector<T, Alloc>::assign(InputIterator first, InputIterator last, 
-            typename std::enable_if<!std::is_integral<InputIterator>::value >::type*) {
-        // if(last < first)
-            // throw std::length_error("vector");
+            typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type*) {
         clear();
         for (InputIterator i = first; i != last; ++i)
             push_back(*i);
     }
 
-    // *
     template <class T, class Alloc> 
     void vector<T, Alloc>::assign(size_type n, const value_type &val) {
         clear();
@@ -373,7 +384,6 @@ namespace ft
         _size--;
     }
 
-    // *
     template <class T, class Alloc>
     typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, const value_type &val) {
 		size_type		off = position - this->begin();
@@ -381,8 +391,6 @@ namespace ft
 		return (iterator(arr + off));
     }
 
-
-    // *
     template <class T, class Alloc>
     void vector<T, Alloc>::insert(iterator position, size_type n, const value_type &val) {
 		size_type		off = position - this->begin();
@@ -409,7 +417,7 @@ namespace ft
     template <class T, class Alloc> 
     template <class InputIterator>
     void vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator last, 
-            typename std::enable_if<!std::is_integral<InputIterator>::value >::type*) {
+            typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type*) {
         difference_type pos = position - begin();
         difference_type n = std::distance(first, last);
         reserve(_size + n);
@@ -422,7 +430,6 @@ namespace ft
 
         for(InputIterator ite = first; ite != last; ++ite)
             _alloc.construct(&arr[pos++], *ite);
-        
         _size += n;
     }
 
@@ -450,7 +457,6 @@ namespace ft
         return first;
     }
 
-    // *
     template <class T, class Alloc> 
     void vector<T, Alloc>::swap(vector &x) {
         value_type *arr_tmp = x.arr;
@@ -466,7 +472,6 @@ namespace ft
         _cap = cap_tmp;
     }
 
-    // *
     template <class T, class Alloc> 
     void vector<T, Alloc>::clear() {
         if(arr != NULL)
@@ -477,7 +482,6 @@ namespace ft
         }
     }
 
-    // *
     template <class InputIterator1, class InputIterator2>
     bool equal ( InputIterator1 first1, InputIterator1 last1, InputIterator2 first2 )
     {
@@ -488,7 +492,6 @@ namespace ft
         }
         return true;
     }
-    // *
     template <class InputIterator1, class InputIterator2>
     bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
     {
@@ -528,10 +531,6 @@ namespace ft
     bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
         return !(lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
-    
-
-
-
 
 };
 

@@ -4,6 +4,7 @@
 #include "../iterators/reverse_iterator.hpp"
 #include "../iterators/iterator_traits.hpp"
 #include "../utils/pair.hpp"
+#include "../utils/is_integral.hpp"
 
 namespace ft
 {
@@ -73,9 +74,9 @@ namespace ft
 						return *this;
 					}
 
-
-
+					// 
 					// Const casting
+					// 
 					template <bool B>
 					map_iterator (const map_iterator<B> & src, typename std::enable_if<!B>::type* = 0) : ptr(src.ptr), _end(src._end) {}
 
